@@ -51,6 +51,14 @@ def tweet_lyric(text):
         print(f"✅ Tweeted:\n{text}")
     except Exception as e:
         print(f"❌ Error tweeting: {e}")
+        if hasattr(e, 'response') and e.response is not None:
+            headers = e.response.headers
+            rate_limit = headers.get('x-rate-limit-limit')
+            rate_remaining = headers.get('x-rate-limit-remaining')
+            rate_reset = headers.get('x-rate-limit-reset')
+            print(f"Rate limit info (error response): limit={rate_limit}, remaining={rate_remaining}, reset={rate_reset}")
+        else:
+            print("No rate limit info available in error response.")
 
 if __name__ == "__main__":
     lyric = select_lyric()
